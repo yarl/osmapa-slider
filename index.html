@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- head -->
+<head>
+
+<!-- metatags -->
+<title>Mapa turystyczna OpenStreetMap Polska | Osmapa.pl - szlaki turystyczne, mapa zabytków</title>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+
+<!-- stylesheets -->
+<link rel="stylesheet" href="bootstrap.css">
+<link rel="stylesheet" href="leaflet/leaflet.css" type="text/css"/>
+<!--[if lte IE 8]><link rel="stylesheet" href="leaflet/leaflet.ie.css" type="text/css"/><![endif]-->
+<link rel="stylesheet" href="main.css" type="text/css"/>
+<link rel="stylesheet" href="style.css" type="text/css"/>
+<link rel="shortcut icon" href="http://openstreetmap.org.pl/osm/wp-content/uploads/2011/10/favicon.png" />
+
+<!-- scripts -->
+<script src="leaflet/leaflet-src.js" type="text/javascript"></script>
+<script src="base/leaflet/L.Bugfixes.js" type="text/javascript"></script>
+<script src="base/leaflet/L.Control.QueryableLayers.js" type="text/javascript"></script>
+<script src="base/leaflet/L.DashedPolyline.js" type="text/javascript"></script>
+<script src="base/leaflet/L.MouseMarker.js" type="text/javascript"></script>
+<script src="base/leaflet/L.SwitchableIcon.js" type="text/javascript"></script>
+<script src="base/leaflet/L.TileLayer.Bing.js" type="text/javascript"></script>
+
+<script src="OSRM.base.js" type="text/javascript"></script>
+<script src="OSRM.config.js" type="text/javascript"></script>
+<script src="utils/OSRM.browsers.js" type="text/javascript"></script>
+<script src="utils/OSRM.classes.js" type="text/javascript"></script>
+
+<script src="main.js" type="text/javascript"></script>
+<!-- <script defer="defer" src="OSRM.debug.js" type="text/javascript"></script> -->
+
+<script src="base/osrm/OSRM.MapView.js" type="text/javascript"></script>
+<script src="base/osrm/OSRM.Marker.js" type="text/javascript"></script>
+<script src="base/osrm/OSRM.Route.js" type="text/javascript"></script>
+
+<script src="base/OSRM.Map.js" type="text/javascript"></script>
+<script src="base/OSRM.Markers.js" type="text/javascript"></script>
+<script src="base/OSRM.Routes.js" type="text/javascript"></script>
+<script src="base/OSRM.HistoryRoutes.js" type="text/javascript"></script>
+<script src="gui/OSRM.GUI.js" type="text/javascript"></script>
+<script src="gui/OSRM.GUIBoxGroup.js" type="text/javascript"></script>
+<script src="gui/OSRM.GUIBoxHandle.js" type="text/javascript"></script>
+<script src="gui/OSRM.Selector.js" type="text/javascript"></script>
+<script src="gui/OSRM.MainGUI.js" type="text/javascript"></script>
+<script src="gui/OSRM.Notifications.js" type="text/javascript"></script>
+<script src="routing/OSRM.Routing.js" type="text/javascript"></script>
+<script src="routing/OSRM.RoutingAlternatives.js" type="text/javascript"></script>
+<script src="routing/OSRM.RoutingDescription.js" type="text/javascript"></script>
+<script src="routing/OSRM.RoutingGeometry.js" type="text/javascript"></script>
+<script src="gui/OSRM.RoutingGUI.js" type="text/javascript"></script>
+<script src="routing/OSRM.RoutingNoNames.js" type="text/javascript"></script>
+<script src="base/OSRM.Via.js" type="text/javascript"></script>
+<script src="base/OSRM.Geocoder.js" type="text/javascript"></script>
+
+<script src="utils/OSRM.CSS.js" type="text/javascript"></script>
+<script src="utils/OSRM.JSONP.js" type="text/javascript"></script>
+<script src="localization/OSRM.Localization.js" type="text/javascript"></script>
+<script src="printing/OSRM.Printing.js" type="text/javascript"></script>
+<script src="utils/OSRM.Utils.js" type="text/javascript"></script>
+
+<script src="http://jqueryfordesigners.com/demo/jquery-1.2.6.js" type="text/javascript"></script>
+<script src="http://jqueryfordesigners.com/demo/jquery.scrollTo-1.3.3.js" type="text/javascript"></script>
+<script src="http://jqueryfordesigners.com/demo/jquery.localscroll-1.2.5.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://jqueryfordesigners.com/demo/jquery.serialScroll-1.2.1.js" type="text/javascript" charset="utf-8"></script>
+<script src="coda-slider.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+
+<!-- body -->
+<body class="base-font">
+
+<img id="logo" src="images/logo.png" alt="Osmapa.pl" />
+<div id="slider" style="background:#facc10">    
+	<ul class="navigation">
+		<li style="background:#8dc63f"><a id="tab" href="#route">Szukaj/Wynacz&nbsp;trasę</a></li>
+		<li style="background:#00753d"><a id="tab" href="#tourist">Turystyka</a></li>
+		<li style="background:#18a897"><a id="tab" href="#edit">Edytuj</a></li>
+		<li style="background:#1a82c5"><a id="tab" href="#bugs">Zgłoś&nbsp;błąd</a></li>
+		<li style="background:#642f8f"><a id="tab" href="#about">O&nbsp;stronie</a></li>
+		<li style="background:#9d316f; min-width: 80px">&nbsp;</li>
+		<li style="background:#ed1f27; min-width: 80px">&nbsp;</li>
+		<li style="background:#f26c25; min-width: 80px">&nbsp;</li>
+	</ul>
+
+	<div class="scroll">
+		<div class="scrollContainer">
+		<div class="panel" id="route">
+			<div>
+				<div id="main-input" >
+					<!--  header -->
+					<div id="input-mask-header" style="display:none">
+					<select id="gui-language-toggle" class="top-left-button"></select>
+					<div id="main-toggle" class="iconic-button cancel-marker top-right-button"></div>
+					</div>
+					
+					<!--  input mask -->
+					<div id="input-mask">
+					<h3>Szukaj/Wynacz trasę</h3>
+					<p class="desc">Wpisz miejsca początkowe i docelowe lub zaznacz na mapie</p>
+					
+					<!-- source/target input -->
+					<div class="full">
+						<div id="input-source">
+							<div class="input-marker">
+								<div class="left"><span id="gui-search-source-label" class="input-label">Start:</span></div>
+								<div class="left"><div id="gui-delete-source" class="iconic-button cancel-marker input-delete"></div></div>
+								<div class="right"><a class="button" id="gui-search-source">Show</a></div>
+							</div>
+							<div class="input-box"><input id="gui-input-source" class="input-box" type="text" maxlength="200" value="" title="Enter start" /></div>
+						</div>
+						<div id="input-target">
+							<div class="input-marker">
+								<div class="left"><span id="gui-search-target-label" class="input-label">End:</span></div>
+								<div class="left"><div id="gui-delete-target" class="iconic-button cancel-marker input-delete"></div></div>
+								<div class="right"><a class="button" id="gui-search-target">Show</a></div>	
+							</div>
+							<div class="input-box"><input id="gui-input-target" class="input-box" type="text" maxlength="200" value="" title="Enter destination" /></div>
+						</div>
+					</div>
+					
+					<div class="quad"></div>	
+					
+					<!-- action buttons -->
+					<div class="full" style="width: 322px;">
+					<span class="input-label" style="width: 80px; float: left;">Opcje trasy:</span>
+					<div class="right" style="float: right;"><a class="button" id="gui-reset">Reset</a> <a class="button-inactive" id="gui-zoom">Reset</a> <a class="button" id="gui-reverse">Reverse</a></div>
+					</div>
+					</div>
+				</div>
+			
+				<div id="main-output" >
+					<div id="information-box-header"></div>
+					<div id="information-box"></div>
+					<div id="legal-notice" class="small-font">GUI2 - OSRM hosting by <a href='http://algo2.iti.kit.edu/'>KIT</a> - Geocoder by <a href='http://www.osm.org/'>OSM</a></div>
+				</div>
+			</div>
+
+			<div id="main-wrapper"></div>
+		</div>
+		
+		<div class="panel" id="tourist">
+			<h3>Turystyka</h3>
+			<p class="desc">Tutaj coś związanego z turystyką. Jeszcze nie wiadomo co, ale na pewno coś ;)</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div class="panel" id="edit">
+			<h3>Edytuj</h3>
+			<p class="desc">Rusz tyłek i edytuj, to nie takie trudne!</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div class="panel" id="bugs">
+			<h3>Zgłoś błąd</h3>
+			<p class="desc">Jakieś linki do bugowisk...</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		<div class="panel" id="about">
+			<h3>O stronie</h3>
+			<p class="desc">Coś o OSM, coś o OSM Polska, coś o Osmapie :)</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- map -->
+<div id="map"></div>
+
+<!-- exclusive notification -->
+<div id="exclusive-notification-blanket">
+<div id="exclusive-notification-wrapper" class="box-wrapper not-selectable">
+<div id="exclusive-notification-content" class="box-content">
+	<!-- header -->
+	<div id="exclusive-notification-toggle" class="iconic-button cancel-marker top-right-button"></div>
+	<div id="exclusive-notification-label" class="box-label">Notification</div>
+
+	<!-- notification text -->
+	<div id="exclusive-notification-box"></div>
+</div>
+</div>
+</div>
+
+<!-- tooltip notification -->
+<div id="tooltip-notification-wrapper" class="box-wrapper not-selectable" style="display:none">
+<div id="tooltip-notification-content" class="box-content">
+	<!-- header -->
+	<div id="tooltip-notification-toggle" class="iconic-button cancel-marker top-right-button"></div>
+	<div class="quad top-right-button"></div>
+	<div id="tooltip-notification-resize" class="iconic-button cancel-marker top-right-button"></div>
+	<div id="tooltip-notification-label" class="box-label">Notification</div>
+
+	<!-- notification text -->
+	<div id="tooltip-notification-box"></div>
+</div>
+</div>
+
+<!-- config gui -->
+<div id="config-wrapper" class="box-wrapper" style="display:none">
+<div id="config-content" class="box-content" style="display:none">
+	<!-- header -->
+	<div id="config-toggle" class="iconic-button cancel-marker top-right-button"></div>
+	<div id="gui-config-label" class="box-label">Configuraion</div>
+
+	<!-- config options -->
+	<div class="full">
+	<div class="row">
+	<div class="left fixed"><span id="gui-language-2-label" class="config-label">Language:</span></div>
+	<div class="left stretch"><select id="gui-language-2-toggle" class="config-select"></select></div>
+	</div>
+	<div class="row">
+	<div class="left fixed"><span id="gui-units-label" class="config-label">Units:</span></div>
+	<div class="left stretch"><select id="gui-units-toggle" class="config-select"></select></div>
+	</div>
+	</div>
+	
+	<!-- data timestamp -->
+	<div class="full">
+	<div class="row">	
+	<div class="right small-font"><span id="gui-data-timestamp">data: n/a</span></div>
+	</div>
+	</div>
+</div>
+</div>
+
+<!-- mapping gui -->
+<div id="mapping-wrapper" class="box-wrapper">
+<div id="mapping-content" class="box-content">
+	<!-- header -->
+	<div id="mapping-toggle" class="iconic-button cancel-marker top-right-button"></div>
+	<div id="gui-mapping-label" class="box-label">Mapping Tools</div>
+	
+	<!-- header -->
+	<div class="full">
+	<div class="row">
+	<div class="left"><input type="checkbox" id="option-highlight-nonames" value="highlight-nonames" class="mapping-checkbox"/></div>
+	<div class="left stretch"><span id="gui-option-highlight-nonames-label" class="checkbox-label small-font">Highlight unnamed streets</span></div>
+	</div>
+	<div class="row">
+	<div class="left"><input type="checkbox" id="option-show-previous-routes" value="show-previous-routes" class="mapping-checkbox"/></div>
+	<div class="left stretch"><span id="gui-option-show-previous-routes-label" class="checkbox-label small-font">Show previous routes</span></div>
+	</div>
+	</div>
+	<a class="button mapping-button" id="open-osmbugs">OSM Bugs</a><span class="quad mapping-button"></span><a class="button mapping-button" id="open-josm">JOSM</a>
+</div>
+</div>
+
+
+
+</body>
+</html>
